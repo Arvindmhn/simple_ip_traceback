@@ -1,3 +1,6 @@
+package ipTraceBack;
+
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -8,27 +11,42 @@ public class IPT {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         String[] UIID = input.split("\\s");
-        Double PI;
-
+        DecimalFormat df = new DecimalFormat("#.#############");
+        double PI[] = new double[32];
+        int ui;
+        for(int i= 0; i<UIID.length;i++){
+        	System.out.println(UIID[i]);
+        }
         //forward
-        PI = Double.parseDouble(UIID[0]);
-        PI = Math.log10(PI) + PI ;
+        PI[0] = Double.parseDouble(UIID[0]);
+        PI[0]= Double.valueOf(df.format(Math.log10(PI[0]) + PI[0])) ;
+        
         //System.out.println("PI value generated: "+ PI);
         for(int i=1;i<UIID.length;i++){
-            PI = Math.log10(PI) + Double.parseDouble(UIID[i]) ;
-            //System.out.println("PI value generated: "+ PI);
+        	ui = Integer.parseInt(UIID[i]);
+            PI[i] = Double.valueOf(df.format(Math.log10(PI[i-1]) + ui)) ;
+            System.out.println(i-1+". PI value generated: "+ PI[i-1]);
         }
-        System.out.println("PI value generated: "+ PI);
+        System.out.println("PI value generated: "+ PI[UIID.length -1]);
 
         //reverse
-        Double UIID_rev;
+        double UIID_rev;
         double[] rev = new double[UIID.length];
-
-        for(int i=0;i<rev.length;i++) {
-            UIID_rev = Math.floor(PI) - (int) Math.log10(PI);
-            rev[i] = UIID_rev;
-            PI  = Math.pow(10, PI - UIID_rev)  ;
-            //System.out.println("rev PI value generated: "+ PI);
+        int j = 0;
+        for(int i=rev.length-1;i>=0;i--) {
+        	if(i ==0 ){
+        		UIID_rev = Math.floor(PI[i]) - (int) Math.log10(PI[i]);
+                rev[j] = UIID_rev;
+                j++;
+                PI[i]  = Math.pow(10, Double.valueOf(PI[i]) - UIID_rev)  ;
+        	}
+        	else{
+            UIID_rev = Math.floor(PI[i]) - (int) Math.log10(PI[i-1]);
+            rev[j] = UIID_rev;
+            j++;
+            PI[i]  = Math.pow(10, Double.valueOf(PI[i]) - UIID_rev)  ;
+        	}
+            System.out.println("rev PI value generated: "+ PI[i]);
         }
 
         System.out.println("Reverse Path >>>");
@@ -38,3 +56,4 @@ public class IPT {
 
     }
 }
+
